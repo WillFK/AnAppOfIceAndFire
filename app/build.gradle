@@ -1,0 +1,100 @@
+buildscript {
+    ext.kotlinVersion = rootProject.ext.kotlinVersion
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath rootProject.ext.androidPlugin
+        classpath rootProject.ext.kotlinPlugin
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+repositories {
+    maven { url "https://jitpack.io" }
+    mavenCentral()
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.fk.iceandfire"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/services/com.fasterxml.jackson.databind.Module'
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/fonts']
+            java.srcDirs += 'src/main/kotlin'
+            test.java.srcDirs += 'src/test/kotlin'
+            androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        }
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+kapt {
+    generateStubs = true
+}
+
+dependencies {
+    compile "com.android.support:design:$androidSupportVersion"
+    kapt "com.android.databinding:compiler:$androidPluginVersion"
+    compile "com.android.support:appcompat-v7:$androidSupportVersion"
+    testCompile 'junit:junit:4.12'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    compile rootProject.ext.rxJava
+    compile(rootProject.ext.rxKotlin)
+            {
+                exclude group: 'io.reactivex'
+                exclude module: 'rxjava'
+            }
+    compile rootProject.ext.rxAndroid
+    compile "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    compile("com.squareup.retrofit2:retrofit:$retrofitVersion")
+            {
+                exclude module: 'okhttp'
+            }
+    compile('com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0') {
+        exclude group: 'io.reactivex'
+        exclude module: 'rxjava'
+    }
+    compile "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+            {
+                exclude module: 'kotlin-reflect'
+            }
+    compile "com.android.support:recyclerview-v7:$recyclerViewVersion"
+    compile "com.squareup.picasso:picasso:$picassoVersion"
+}

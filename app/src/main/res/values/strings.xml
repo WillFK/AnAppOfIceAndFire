@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">An App of Ice and Fire</string>
+    <string name="book_tab">Books</string>
+    <string name="house_tab">Houses</string>
+    <string name="character_tab">Characters</string>
+    <string name="book_pages">%s Pages</string>
+</resources>
